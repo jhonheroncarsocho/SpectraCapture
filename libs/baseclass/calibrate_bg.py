@@ -31,7 +31,7 @@ class CalibrateBG(Screen):
         ''')
 
         # access the NIR
-        # self.spec = MDApp.get_running_app().spec
+        self.spec = MDApp.get_running_app().spec
 
         mygraph = GraphGenerator()
         
@@ -39,10 +39,10 @@ class CalibrateBG(Screen):
         self.figure_wgt2.axes = mygraph.ax1
 
         # get initial spectral data
-        self.figure_wgt2.xmin= 0 #np.min(self.spec.wavelengths())
-        self.figure_wgt2.xmax = 100 #np.max(self.spec.wavelengths())
-        self.figure_wgt2.ymin= 0 #np.min(self.spec.intensities(False,True))
-        self.figure_wgt2.ymax = 100 #np.max(self.spec.intensities(False,True))
+        self.figure_wgt2.xmin= np.min(self.spec.wavelengths())
+        self.figure_wgt2.xmax = np.max(self.spec.wavelengths())
+        self.figure_wgt2.ymin= np.min(self.spec.intensities(False,True))
+        self.figure_wgt2.ymax = np.max(self.spec.intensities(False,True))
         self.figure_wgt2.line1=mygraph.line1
         mygraph.line1.set_color('red')
         self.home()
@@ -74,8 +74,8 @@ class CalibrateBG(Screen):
         self.figure_wgt2.home()
         
     def update_graph(self,_):
-        xdata= np.random.randint(0, 100, size=(1, 92)) #self.spec.wavelengths()
-        intensities = np.random.randint(0, 100, size=(1, 92)) #self.spec.intensities(False,True)
+        xdata= self.spec.wavelengths()
+        intensities = self.spec.intensities(False,True)
         self.figure_wgt2.line1.set_data(xdata,intensities)
         self.figure_wgt2.ymax = np.max(intensities)
         self.figure_wgt2.ymin = np.min(intensities)
@@ -96,7 +96,7 @@ class CalibrateBG(Screen):
         self.ids['capture_bg'].disabled = not self.ids['capture_bg'].disabled
 
     def disable_clock(self):
-        self.insert_data('background', np.random.randint(0, 100, size=(1, 92))) #np.array(self.spec.intensities(False,True), dtype=np.float32).reshape(-1, 1))
+        self.insert_data('background', np.array(self.spec.intensities(False,True), dtype=np.float32).reshape(-1, 1))
         Clock.unschedule(self.update_graph)
     
     def on_leave(self, *args):

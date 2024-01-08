@@ -4,6 +4,7 @@
 <Scanner>
     name: 'scanner'
     figure_wgt4:figure_wgt4
+    id_save:id_save
 
     canvas.before:
         Color:
@@ -30,6 +31,11 @@
             padding: "10dp"
             spacing: 5
             halign: 'center'
+
+            MDLabel:
+                id: id_save
+                text: "0"
+                font_name: './assets/fonts/IMPACT.TTF'
 
 
         MDBoxLayout:
@@ -79,3 +85,17 @@
                 on_release:
                     root.activate_button()
                     root.on_enter()
+            
+            MDRectangleFlatButton:
+                id: csv_button
+                size_hint_x: 0.333
+                size_hint_y: None
+                text:"CSV"
+                theme_text_color: "Custom"
+                font_name: './assets/fonts/IMPACT.TTF'
+                text_color: 0.7215, 0.451, 0.2, 1 #Brown
+                line_color: 0.7215, 0.451, 0.2, 1 #Brown
+                md_bg_color: 'white'
+                on_release:
+                    root.get_csv()
+            

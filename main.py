@@ -13,8 +13,8 @@ import os
 
 
 class MyApp(MDApp):
-    # spec = Spectrometer.from_first_available()
-    # spec.integration_time_micros(100000)
+    spec = Spectrometer.from_first_available()
+    spec.integration_time_micros(100000)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -29,8 +29,8 @@ class MyApp(MDApp):
         return kv_run
         
     def on_exit(self):
-        # self.spec.close()
-        pass
+        self.spec.close()
+        
 
     def show_screen(self, name):
         self.root.current = 'lobby'
