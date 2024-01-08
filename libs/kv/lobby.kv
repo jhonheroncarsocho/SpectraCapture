@@ -1,0 +1,52 @@
+<Lobby>
+    name: 'lobby'
+
+    canvas.before:
+        Color:
+            rgba: 0.7215, 0.451, 0.2, 1  # First color (in RGBA)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: ''
+
+    MDFloatLayout:
+        orientation: 'vertical'
+        padding: '10dp'
+        Image:
+            source: 'logo.png' 
+            size_hint: None, None
+            size: dp(450), dp(450)  # Adjust the size as needed
+            pos_hint: {'center_x': 0.5, 'center_y': 0.6}
+    
+        # MDLabel:
+        #     text: 'NPK Identifier'
+        #     halign: 'center'
+        #     theme_text_color: 'Secondary'
+        MDBoxLayout:
+            
+            size_hint_y: .2
+            spacing: 10
+            
+            MDRectangleFlatButton:
+                size_hint_x: 1
+                size_hint_y: None
+                text: 'Shutdown'
+                theme_text_color: "Custom"
+                font_name: './assets/fonts/IMPACT.TTF'
+                text_color: 0.7215, 0.451, 0.2, 1 #Brown
+                line_color: 0.7215, 0.451, 0.2, 1 #Brown
+                md_bg_color: 'white'
+                on_release: 
+                    root.shutdown()
+                    #app.stop()
+            
+            MDRectangleFlatButton:
+                size_hint_x: 1
+                size_hint_y: None
+                text: 'Start Scanning'
+                theme_text_color: "Custom"
+                font_name: './assets/fonts/IMPACT.TTF'
+                text_color: 0.7215, 0.451, 0.2, 1 #Brown
+                line_color: 0.7215, 0.451, 0.2, 1 #Brown
+                md_bg_color: 'white'
+                on_release: app.root.current = 'cal_dark'
