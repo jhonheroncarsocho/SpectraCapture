@@ -6,7 +6,6 @@ from libs.baseclass import lobby, calibrate_light, calibrate_bg, calibrate_dark,
 
 from kivy.config import Config
 
-import RPi.GPIO as GPIO
 from seabreeze.spectrometers import Spectrometer
 import atexit
 import os
@@ -14,26 +13,24 @@ import os
 
 
 class MyApp(MDApp):
-    spec = Spectrometer.from_first_available()
-    spec.integration_time_micros(100000)
+    # spec = Spectrometer.from_first_available()
+    # spec.integration_time_micros(100000)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.title = 'NPK Identifier'
         self.theme_cls.primary_palette = "Gray"
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(12, GPIO.OUT)
-        GPIO.output(12, GPIO.LOW)
 
     def build(self):
         kv_run = Builder.load_file("main.kv")
         atexit.register(self.on_exit)
-        Config.set('graphics', 'fullscreen', 'auto')
-        Config.write()
+        # Config.set('graphics', 'windowed', 'auto')
+        # Config.write()
         return kv_run
         
     def on_exit(self):
-        self.spec.close()
+        # self.spec.close()
+        pass
 
     def show_screen(self, name):
         self.root.current = 'lobby'
@@ -42,5 +39,4 @@ class MyApp(MDApp):
 
 
 if __name__ == "__main__":
-    os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
     MyApp().run()

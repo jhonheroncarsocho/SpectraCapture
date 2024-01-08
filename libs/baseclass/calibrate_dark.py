@@ -8,7 +8,6 @@ from graph_generator import GraphGenerator
 import numpy as np
 import sqlite3
 
-import RPi.GPIO as GPIO
 
 
 Builder.load_file('./libs/kv/calibrate_dark.kv')
@@ -20,9 +19,6 @@ class CalibrateDark(Screen):
         super().__init__(**kwargs)
 
     def on_enter(self, *args):
-
-        # set the lights to low
-        GPIO.output(12, GPIO.LOW)
 
         self.conn = sqlite3.connect('spectral_calib.db')
         self.cursor = self.conn.cursor()
@@ -36,7 +32,7 @@ class CalibrateDark(Screen):
         ''')
 
         # access the NIR
-        self.spec = MDApp.get_running_app().spec
+        # self.spec = MDApp.get_running_app().spec
 
         mygraph = GraphGenerator()
         
@@ -44,10 +40,10 @@ class CalibrateDark(Screen):
         self.figure_wgt1.axes = mygraph.ax1
 
         # get initial spectral data
-        self.figure_wgt1.xmin= np.min(self.spec.wavelengths())
-        self.figure_wgt1.xmax = np.max(self.spec.wavelengths())
-        self.figure_wgt1.ymin=np.min(self.spec.intensities(False,True))
-        self.figure_wgt1.ymax = np.max(self.spec.intensities(False,True))
+        self.figure_wgt1.xmin= 0  #np.min(self.spec.wavelengths())
+        self.figure_wgt1.xmax = 100 #np.max(self.spec.wavelengths())
+        self.figure_wgt1.ymin= 0 # np.min(self.spec.intensities(False,True))
+        self.figure_wgt1.ymax = 100 #np.max(self.spec.intensities(False,True))
         self.figure_wgt1.line1=mygraph.line1
         mygraph.line1.set_color('red')
         self.home()
@@ -79,8 +75,8 @@ class CalibrateDark(Screen):
         self.figure_wgt1.home()
         
     def update_graph(self,_):
-        xdata= self.spec.wavelengths()
-        intensities = self.spec.intensities(False,True)
+        xdata= np.random.randint(0, 100, size=(1, 92)) #self.spec.wavelengths()
+        intensities = np.random.randint(0, 100, size=(1, 92)) #self.spec.intensities(False,True)
         self.figure_wgt1.line1.set_data(xdata,intensities)
         self.figure_wgt1.ymax = np.max(intensities)
         self.figure_wgt1.ymin = np.min(intensities)
@@ -101,7 +97,8 @@ class CalibrateDark(Screen):
         self.ids['capture_dark'].disabled = not self.ids['capture_dark'].disabled
 
     def disable_clock(self):
-        self.insert_data('dark', np.array(self.spec.intensities(False,True), dtype=np.float32).reshape(-1, 1))
+        # self.insert_data('dark', np.array(self.spec.intensities(False,True), dtype=np.float32).reshape(-1, 1))
+        self.insert_data('dark', np.random.randint(0, 100, size=(1, 92)) )
         Clock.unschedule(self.update_graph)
     
     def on_leave(self, *args):

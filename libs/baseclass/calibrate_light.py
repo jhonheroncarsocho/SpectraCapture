@@ -8,8 +8,6 @@ from graph_generator import GraphGenerator
 import numpy as np
 import sqlite3
 
-import RPi.GPIO as GPIO
-
 
 Builder.load_file('./libs/kv/calibrate_light.kv')
 
@@ -21,8 +19,6 @@ class CalibrateLight(Screen):
 
 
     def on_enter(self, *args):
-        # set the lights to high
-        GPIO.output(12, GPIO.HIGH)
         self.conn = sqlite3.connect('spectral_calib.db')
         self.cursor = self.conn.cursor()
         # Create a table to store spectral data
@@ -35,7 +31,7 @@ class CalibrateLight(Screen):
         ''')
 
         # access the NIR
-        self.spec = MDApp.get_running_app().spec
+        # self.spec = MDApp.get_running_app().spec
 
         mygraph = GraphGenerator()
 
@@ -43,10 +39,10 @@ class CalibrateLight(Screen):
         self.figure_wgt3.axes = mygraph.ax1
 
         # get initial spectral data
-        self.figure_wgt3.xmin= np.min(self.spec.wavelengths())
-        self.figure_wgt3.xmax = np.max(self.spec.wavelengths())
-        self.figure_wgt3.ymin=np.min(self.spec.intensities(False,True))
-        self.figure_wgt3.ymax = np.max(self.spec.intensities(False,True))
+        self.figure_wgt3.xmin= 0 #np.min(self.spec.wavelengths())
+        self.figure_wgt3.xmax = 100 #np.max(self.spec.wavelengths())
+        self.figure_wgt3.ymin= 0 #np.min(self.spec.intensities(False,True))
+        self.figure_wgt3.ymax = 100 #np.max(self.spec.intensities(False,True))
         self.figure_wgt3.line1=mygraph.line1
         mygraph.line1.set_color('red')
         self.home()
@@ -78,8 +74,8 @@ class CalibrateLight(Screen):
         self.figure_wgt3.home()
         
     def update_graph(self,_):
-        xdata= self.spec.wavelengths()
-        intensities = self.spec.intensities(False,True)
+        xdata= np.random.randint(0, 100, size=(1, 92)) #self.spec.wavelengths()
+        intensities = np.random.randint(0, 100, size=(1, 92)) #self.spec.intensities(False,True)
         self.figure_wgt3.line1.set_data(xdata,intensities)
         self.figure_wgt3.ymax = np.max(intensities)
         self.figure_wgt3.ymin = np.min(intensities)
@@ -100,7 +96,7 @@ class CalibrateLight(Screen):
         self.ids['capture_light'].disabled = not self.ids['capture_light'].disabled
 
     def disable_clock(self):
-        self.insert_data('light', np.array(self.spec.intensities(False,True), dtype=np.float32).reshape(-1, 1))
+        self.insert_data('light', np.random.randint(0, 100, size=(1, 92))) #np.array(self.spec.intensities(False,True), dtype=np.float32).reshape(-1, 1))
         Clock.unschedule(self.update_graph)
     
     def on_leave(self, *args):
