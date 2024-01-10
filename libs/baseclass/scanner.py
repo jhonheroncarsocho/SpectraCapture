@@ -88,8 +88,8 @@ class Scanner(Screen):
         reflectance_mult = np.multiply(reflectance, 100)
 
         # Apply Savitzky-Golay filter
-        window_length = 6  # Adjust for desired smoothing level
-        polyorder = 3  # Polynomial order (often 2 or 3 for spectroscopy)
+        window_length = 5  # Adjust for desired smoothing level
+        polyorder = 2  # Polynomial order (often 2 or 3 for spectroscopy)
 
         return savgol_filter(reflectance_mult, window_length, polyorder)
     
@@ -126,7 +126,9 @@ class Scanner(Screen):
     def disable_clock(self):
         self.save_data('reflectance', self.reflectance_cal(np.array(self.spec.intensities(False,True), dtype=np.float32)))
         Clock.unschedule(self.update_graph)
-
+    
+    def disable_clock_home(self):
+        Clock.unschedule(self.update_graph)
 
     def get_csv(self):
         # Get the current date and time

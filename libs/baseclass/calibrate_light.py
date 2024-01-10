@@ -75,7 +75,7 @@ class CalibrateLight(Screen):
         
     def update_graph(self,_):
         xdata= self.spec.wavelengths()
-        intensities = self.spec.intensities(False,True)
+defa        intensities = self.spec.intensities(False,True)
         self.figure_wgt3.line1.set_data(xdata,intensities)
         self.figure_wgt3.ymax = np.max(intensities)
         self.figure_wgt3.ymin = np.min(intensities)
